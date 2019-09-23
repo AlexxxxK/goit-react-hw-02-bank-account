@@ -1,0 +1,44 @@
+.history {
+  top: 248px;
+  position: relative;
+  border-collapse: collapse;
+  border-style: hidden;
+  border-radius: 3px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.25);
+  width: 870px;
+  margin: 0 auto 30px;
+}
+
+.history th {
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.history thead > tr {
+  background-color: rgb(235, 238, 242);
+  height: 68px;
+  font-size: 13px;
+  font-family: "HelveticaNeueCyr";
+  color: rgb(39, 39, 39);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.history tbody {
+  font-size: 16px;
+  font-family: "Roboto";
+  color: rgb(92, 105, 117);
+  line-height: 1.2;
+}
+
+.history tbody tr {
+  height: 68px;
+}
+
+.history td {
+  text-align: center;
+  border: 1px solid rgb(235, 238, 242);
+}
+
+.history td::first-letter {
+  text-transform: uppercase;
+}

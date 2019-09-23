@@ -1,0 +1,7 @@
+[user]
+	name = AlexxxxK
+	email = oleksandr.kozyr@outlook.com
+[core]
+	autocrlf = false
+	safecrlf = false
+	autorrlf = true
