@@ -12,7 +12,7 @@ const TransactionHistory = ({ transactions }) => {
           <th>Date</th>
         </tr>
       </thead>
-      {transactions.length !== 0 && (
+      {transactions.length > 0 && (
         <tbody>
           {transactions.map(transaction => (
             <tr key={transaction.id}>
