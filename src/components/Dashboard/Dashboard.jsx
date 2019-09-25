@@ -22,10 +22,11 @@ export default class Dashboard extends Component {
     this.deposits = 0;
     this.withdrawals = 0;
     this.amount = 0;
+    this.inputValue = "";
   }
 
   handleAmountSubmit = event => {
-    this.amount = Math.round(Number(event.target.value) * 100) / 100;
+    this.amount = Math.round(Number(this.inputValue) * 100) / 100;
   };
 
   handleDeposit = () => {
@@ -77,10 +78,12 @@ export default class Dashboard extends Component {
 
   render() {
     const { transactions, balance } = this.state;
+    value = this.inputValue;
 
     return (
       <div className={styles.dashboard}>
         <Controls
+          value={value}
           handleAmountSubmit={this.handleAmountSubmit}
           handleDeposit={this.handleDeposit}
           handleWithdrawal={this.handleWithdrawal}
