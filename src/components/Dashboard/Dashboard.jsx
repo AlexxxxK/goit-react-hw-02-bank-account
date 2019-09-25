@@ -30,6 +30,7 @@ export default class Dashboard extends Component {
   };
 
   handleDeposit = () => {
+    this.inputValue = "";
     if (this.amount <= 0) {
       toast.warn("Введите сумму для проведения операции!");
       return;
@@ -51,6 +52,7 @@ export default class Dashboard extends Component {
   };
 
   handleWithdrawal = () => {
+    this.inputValue = "";
     if (this.amount <= 0) {
       toast.warn("Введите сумму для проведения операции!");
       return;
