@@ -2,10 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Controls.module.css";
 
-const Controls = ({ handleAmountSubmit, handleDeposit, handleWithdrawal }) => {
+const Controls = ({ value, handleAmountSubmit, handleDeposit, handleWithdrawal }) => {
   return (
     <section className={styles.controls}>
       <input
+        value={value}
         type="number"
         className={styles.input}
         onChange={handleAmountSubmit}
@@ -24,6 +25,7 @@ const Controls = ({ handleAmountSubmit, handleDeposit, handleWithdrawal }) => {
 };
 
 Controls.propTypes = {
+  value: PropTypes.string.isRequired,
   handleAmountSubmit: PropTypes.func.isRequired,
   handleDeposit: PropTypes.func.isRequired,
   handleWithdrawal: PropTypes.func.isRequired,
