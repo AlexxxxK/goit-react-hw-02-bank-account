@@ -2,7 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Controls.module.css";
 
-const Controls = ({ value, handleAmountSubmit, handleDeposit, handleWithdrawal }) => {
+const Controls = ({
+  value,
+  handleAmountSubmit,
+  handleDeposit,
+  handleWithdrawal,
+}) => {
   return (
     <section className={styles.controls}>
       <input

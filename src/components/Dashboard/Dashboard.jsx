@@ -18,19 +18,22 @@ export default class Dashboard extends Component {
     this.state = {
       transactions: [],
       balance: 0,
+      inputValue: "",
     };
     this.deposits = 0;
     this.withdrawals = 0;
     this.amount = 0;
-    this.inputValue = "";
   }
 
   handleAmountSubmit = event => {
-    this.amount = Math.round(Number(this.inputValue) * 100) / 100;
+    this.setState({
+      inputValue: event.target.value,
+    });
   };
 
   handleDeposit = () => {
-    this.inputValue = "";
+    this.amount = Math.round(Number(this.state.inputValue) * 100) / 100;
+
     if (this.amount <= 0) {
       toast.warn("Введите сумму для проведения операции!");
       return;
@@ -46,13 +49,15 @@ export default class Dashboard extends Component {
     this.setState(prevState => ({
       transactions: [...prevState.transactions, transaction],
       balance: Math.round((prevState.balance + this.amount) * 100) / 100,
+      inputValue: "",
     }));
 
     this.deposits = Math.round((this.deposits + this.amount) * 100) / 100;
   };
 
   handleWithdrawal = () => {
-    this.inputValue = "";
+    this.amount = Math.round(Number(this.state.inputValue) * 100) / 100;
+
     if (this.amount <= 0) {
       toast.warn("Введите сумму для проведения операции!");
       return;
@@ -73,19 +78,19 @@ export default class Dashboard extends Component {
     this.setState(prevState => ({
       transactions: [...prevState.transactions, transaction],
       balance: Math.round((prevState.balance - this.amount) * 100) / 100,
+      inputValue: "",
     }));
 
     this.withdrawals = Math.round((this.withdrawals + this.amount) * 100) / 100;
   };
 
   render() {
-    const { transactions, balance } = this.state;
-    value = this.inputValue;
+    const { inputValue, transactions, balance } = this.state;
 
     return (
       <div className={styles.dashboard}>
         <Controls
-          value={value}
+          value={inputValue}
           handleAmountSubmit={this.handleAmountSubmit}
           handleDeposit={this.handleDeposit}
           handleWithdrawal={this.handleWithdrawal}
