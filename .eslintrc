@@ -34,6 +34,15 @@
       2,
       "always",
       { "ignoreClassFields": true }
+    ],
+    "react/state-in-constructor": [1, "never"],
+    "react/static-property-placement": [
+      0,
+      "property assignment",
+      {
+        "defaultProps": "property assignment",
+        "propTypes": "property assignment"
+      }
     ]
   },
   "globals": {

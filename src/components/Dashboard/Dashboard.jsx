@@ -13,17 +13,13 @@ toast.configure({
 });
 
 export default class Dashboard extends Component {
-  constructor() {
-    super();
-    this.state = {
-      transactions: [],
-      balance: 0,
-      inputValue: "",
-    };
-    this.deposits = 0;
-    this.withdrawals = 0;
-    this.amount = 0;
-  }
+  state = {
+    transactions: [],
+    balance: 0,
+    inputValue: "",
+    deposits: 0,
+    withdrawals: 0,
+  };
 
   handleAmountSubmit = event => {
     this.setState({
@@ -31,74 +27,63 @@ export default class Dashboard extends Component {
     });
   };
 
-  handleDeposit = () => {
-    this.amount = Math.round(Number(this.state.inputValue) * 100) / 100;
+  handleTransaction = event => {
+    const { name } = event.target;
+    const amount = Math.round(Number(this.state.inputValue) * 100) / 100;
 
-    if (this.amount <= 0) {
+    if (amount <= 0) {
       toast.warn("Введите сумму для проведения операции!");
       return;
     }
 
-    const transaction = {
-      id: uuidv4(),
-      type: "deposit",
-      amount: this.amount,
-      date: new Date().toLocaleString(),
-    };
-
-    this.setState(prevState => ({
-      transactions: [...prevState.transactions, transaction],
-      balance: Math.round((prevState.balance + this.amount) * 100) / 100,
-      inputValue: "",
-    }));
-
-    this.deposits = Math.round((this.deposits + this.amount) * 100) / 100;
-  };
-
-  handleWithdrawal = () => {
-    this.amount = Math.round(Number(this.state.inputValue) * 100) / 100;
-
-    if (this.amount <= 0) {
-      toast.warn("Введите сумму для проведения операции!");
-      return;
-    }
-
-    if (this.amount > this.state.balance) {
+    if (name === "withdraw" && amount > this.state.balance) {
       toast.error("На счету недостаточно средств для проведения операции!");
       return;
     }
 
     const transaction = {
       id: uuidv4(),
-      type: "withdrawal",
-      amount: this.amount,
+      type: name === "deposit" ? "deposit" : "withdrawal",
+      amount,
       date: new Date().toLocaleString(),
     };
 
     this.setState(prevState => ({
       transactions: [...prevState.transactions, transaction],
-      balance: Math.round((prevState.balance - this.amount) * 100) / 100,
+      balance:
+        Math.round(
+          (name === "deposit"
+            ? prevState.balance + amount
+            : prevState.balance - amount) * 100,
+        ) / 100,
+      [name === "deposit" ? "deposits" : "withdrawals"]:
+        name === "deposit"
+          ? Math.round((prevState.deposits + amount) * 100) / 100
+          : Math.round((prevState.withdrawals + amount) * 100) / 100,
       inputValue: "",
     }));
-
-    this.withdrawals = Math.round((this.withdrawals + this.amount) * 100) / 100;
   };
 
   render() {
-    const { inputValue, transactions, balance } = this.state;
+    const {
+      inputValue,
+      transactions,
+      balance,
+      withdrawals,
+      deposits,
+    } = this.state;
 
     return (
       <div className={styles.dashboard}>
         <Controls
           value={inputValue}
           handleAmountSubmit={this.handleAmountSubmit}
-          handleDeposit={this.handleDeposit}
-          handleWithdrawal={this.handleWithdrawal}
+          handleTransaction={this.handleTransaction}
         />
         <Balance
           balance={balance}
-          deposits={this.deposits}
-          withdrawals={this.withdrawals}
+          deposits={deposits}
+          withdrawals={withdrawals}
         />
         <TransactionHistory transactions={transactions} />
       </div>
