@@ -15,28 +15,36 @@ toast.configure({
 export default class Dashboard extends Component {
   state = {
     transactions: [],
-    balance: 0,
-    inputValue: "",
-    deposits: 0,
-    withdrawals: 0,
+    inputAmount: "",
   };
 
-  handleAmountSubmit = event => {
+  handleAmountSubmit = ({ target }) => {
     this.setState({
-      inputValue: event.target.value,
+      inputAmount: target.value,
     });
   };
 
-  handleTransaction = event => {
-    const { name } = event.target;
-    const amount = Math.round(Number(this.state.inputValue) * 100) / 100;
+  handleTransaction = ({ target }) => {
+    const { name } = target;
+    const amount = Number(this.state.inputAmount);
+    const balance =
+      Math.round(
+        this.state.transactions.reduce(
+          (sum, transaction) =>
+            transaction.type === "deposit"
+              ? sum + transaction.amount
+              : sum - transaction.amount,
+          0,
+        ) * 100,
+      ) / 100;
+    const regex = /^\d+(\.\d{0,2})?$/g;
 
-    if (amount <= 0) {
+    if (amount <= 0 || !regex.test(this.state.inputAmount)) {
       toast.warn("Введите сумму для проведения операции!");
       return;
     }
 
-    if (name === "withdraw" && amount > this.state.balance) {
+    if (name === "withdraw" && amount > balance) {
       toast.error("На счету недостаточно средств для проведения операции!");
       return;
     }
@@ -50,41 +58,21 @@ export default class Dashboard extends Component {
 
     this.setState(prevState => ({
       transactions: [...prevState.transactions, transaction],
-      balance:
-        Math.round(
-          (name === "deposit"
-            ? prevState.balance + amount
-            : prevState.balance - amount) * 100,
-        ) / 100,
-      [name === "deposit" ? "deposits" : "withdrawals"]:
-        name === "deposit"
-          ? Math.round((prevState.deposits + amount) * 100) / 100
-          : Math.round((prevState.withdrawals + amount) * 100) / 100,
-      inputValue: "",
+      inputAmount: "",
     }));
   };
 
   render() {
-    const {
-      inputValue,
-      transactions,
-      balance,
-      withdrawals,
-      deposits,
-    } = this.state;
+    const { inputAmount, transactions } = this.state;
 
     return (
       <div className={styles.dashboard}>
         <Controls
-          value={inputValue}
+          value={inputAmount}
           handleAmountSubmit={this.handleAmountSubmit}
           handleTransaction={this.handleTransaction}
         />
-        <Balance
-          balance={balance}
-          deposits={deposits}
-          withdrawals={withdrawals}
-        />
+        <Balance transactions={transactions} />
         <TransactionHistory transactions={transactions} />
       </div>
     );

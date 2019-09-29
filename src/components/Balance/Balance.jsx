@@ -2,22 +2,52 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Balance.module.css";
 
-const Balance = ({ balance, withdrawals, deposits }) => (
+const Balance = ({ transactions }) => (
   <section className={styles.balance}>
     <span role="img" aria-label="deposits">
-      ⬆️${deposits}
+      ⬆️$
+      {Math.round(
+        transactions.reduce(
+          (sum, transaction) =>
+            transaction.type === "deposit" ? sum + transaction.amount : sum,
+          0,
+        ) * 100,
+      ) / 100}
     </span>
     <span role="img" aria-label="withdrawals">
-      ⬇️${withdrawals}
+      ⬇️$
+      {Math.round(
+        transactions.reduce(
+          (sum, transaction) =>
+            transaction.type === "withdrawal" ? sum + transaction.amount : sum,
+          0,
+        ) * 100,
+      ) / 100}
     </span>
-    <span>Balance: ${balance}</span>
+    <span>
+      Balance: $
+      {Math.round(
+        transactions.reduce(
+          (sum, transaction) =>
+            transaction.type === "deposit"
+              ? sum + transaction.amount
+              : sum - transaction.amount,
+          0,
+        ) * 100,
+      ) / 100}
+    </span>
   </section>
 );
 
 Balance.propTypes = {
-  balance: PropTypes.number.isRequired,
-  withdrawals: PropTypes.number.isRequired,
-  deposits: PropTypes.number.isRequired,
+  transactions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+      date: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default Balance;

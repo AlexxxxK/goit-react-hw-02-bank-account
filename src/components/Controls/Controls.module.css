@@ -47,3 +47,7 @@
   line-height: 1.2;
   text-align: center;
 }
+
+.input::placeholder {
+  color: rgb(228, 225, 225);
+}
