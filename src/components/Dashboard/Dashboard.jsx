@@ -18,6 +18,34 @@ export default class Dashboard extends Component {
     inputAmount: "",
   };
 
+  componentDidMount() {
+    try {
+      const prevTransactions = localStorage.getItem("accountTransactions");
+
+      if (prevTransactions)
+        this.setState({
+          transactions: [...JSON.parse(prevTransactions)],
+        });
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    const { transactions } = this.state;
+
+    if (prevState.transaction !== transactions) {
+      try {
+        localStorage.setItem(
+          "accountTransactions",
+          JSON.stringify(transactions),
+        );
+      } catch (error) {
+        toast.error(error);
+      }
+    }
+  }
+
   handleAmountSubmit = ({ target }) => {
     this.setState({
       inputAmount: target.value,
